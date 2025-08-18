@@ -20,10 +20,14 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     try {
+
+      console.log(process.env.REACT_APP_API_URL);
       const res = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/auth/login`,
         formData
       );
+
+
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
       toast.success("Login successful");
