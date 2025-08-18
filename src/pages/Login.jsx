@@ -21,9 +21,9 @@ export default function Login() {
     setLoading(true);
     try {
 
-      console.log(process.env.REACT_APP_API_URL);
+      // console.log(process.env.REACT_APP_API_URL);
       const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/auth/login`,
+        `https://auth-dashboardpages-backend.onrender.com/api/auth/login`,
         formData
       );
 

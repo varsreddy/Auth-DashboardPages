@@ -24,8 +24,14 @@ export default function Signup() {
     e.preventDefault();
     setLoading(true);
     try {
+      // const res = await axios.post(
+      //   `${process.env.REACT_APP_API_URL}/api/auth/signup`,
+      //   formData
+      // );
+
+
       const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/auth/signup`,
+        `https://auth-dashboardpages-backend.onrender.com/api/auth/signup`,
         formData
       );
       toast.success(res.data.message || "Signup successful 🎉");
