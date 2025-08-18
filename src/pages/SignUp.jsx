@@ -24,15 +24,18 @@ export default function Signup() {
     e.preventDefault();
     setLoading(true);
     try {
-      // const res = await axios.post("http://localhost:5000/api/auth/signup", formData);
       const res = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/auth/signup`,
         formData
       );
-      toast.success(res.data.message || "Signup successful ");
+      toast.success(res.data.message || "Signup successful 🎉");
       navigate("/login");
     } catch (err) {
-      toast.error(err.response?.data?.error || "Signup failed ");
+      const message =
+        (err.response && err.response.data && err.response.data.error) ||
+        err.message ||
+        "Signup failed";
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -45,9 +48,8 @@ export default function Signup() {
         className="w-full max-w-md bg-white p-6 rounded-xl shadow-lg"
       >
         <h2 className="text-2xl font-bold text-center mb-6 text-purple-700">
-          Create your PopX account
+          Create your account
         </h2>
-
         <input
           name="fullName"
           placeholder="Full Name*"
@@ -115,9 +117,7 @@ export default function Signup() {
           type="submit"
           disabled={loading}
           className={`w-full py-3 rounded-lg text-white font-semibold transition ${
-            loading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-purple-600 hover:bg-purple-700"
+            loading ? "bg-gray-400 cursor-not-allowed" : "bg-purple-600 hover:bg-purple-700"
           }`}
         >
           {loading ? "Creating..." : "Create Account"}

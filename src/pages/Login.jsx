@@ -9,9 +9,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
-      navigate("/dashboard");
-    }
+    if (localStorage.getItem("token")) navigate("/dashboard");
   }, [navigate]);
 
   const handleChange = (e) => {
@@ -22,7 +20,6 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     try {
-      // const res = await axios.post("http://localhost:5000/api/auth/login", formData);
       const res = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/auth/login`,
         formData
@@ -32,7 +29,11 @@ export default function Login() {
       toast.success("Login successful");
       navigate("/dashboard");
     } catch (err) {
-      toast.error(err.response?.data?.error || "Login failed");
+      const message =
+        (err.response && err.response.data && err.response.data.error) ||
+        err.message ||
+        "Login failed";
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -67,9 +68,7 @@ export default function Login() {
           type="submit"
           disabled={loading}
           className={`w-full py-3 rounded-lg text-white font-semibold transition ${
-            loading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-purple-600 hover:bg-purple-700"
+            loading ? "bg-gray-400 cursor-not-allowed" : "bg-purple-600 hover:bg-purple-700"
           }`}
         >
           {loading ? "Logging in..." : "Login"}
