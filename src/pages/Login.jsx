@@ -22,7 +22,11 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", formData);
+      // const res = await axios.post("http://localhost:5000/api/auth/login", formData);
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/auth/login`,
+        formData
+      );
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
       toast.success("Login successful");
@@ -63,7 +67,9 @@ export default function Login() {
           type="submit"
           disabled={loading}
           className={`w-full py-3 rounded-lg text-white font-semibold transition ${
-            loading ? "bg-gray-400 cursor-not-allowed" : "bg-purple-600 hover:bg-purple-700"
+            loading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-purple-600 hover:bg-purple-700"
           }`}
         >
           {loading ? "Logging in..." : "Login"}

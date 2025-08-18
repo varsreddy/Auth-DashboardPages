@@ -24,11 +24,15 @@ export default function Signup() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/signup", formData);
-      toast.success(res.data.message || "Signup successful 🎉");
+      // const res = await axios.post("http://localhost:5000/api/auth/signup", formData);
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/auth/signup`,
+        formData
+      );
+      toast.success(res.data.message || "Signup successful ");
       navigate("/login");
     } catch (err) {
-      toast.error(err.response?.data?.error || "Signup failed ❌");
+      toast.error(err.response?.data?.error || "Signup failed ");
     } finally {
       setLoading(false);
     }
@@ -81,7 +85,6 @@ export default function Signup() {
           className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-purple-500"
         />
 
-        {/* Agency Radio */}
         <div className="mb-4">
           <p className="text-sm font-medium mb-2">Are you an Agency?*</p>
           <div className="flex gap-6">
@@ -112,7 +115,9 @@ export default function Signup() {
           type="submit"
           disabled={loading}
           className={`w-full py-3 rounded-lg text-white font-semibold transition ${
-            loading ? "bg-gray-400 cursor-not-allowed" : "bg-purple-600 hover:bg-purple-700"
+            loading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-purple-600 hover:bg-purple-700"
           }`}
         >
           {loading ? "Creating..." : "Create Account"}
