@@ -19,33 +19,29 @@ export default function Signup() {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      // const res = await axios.post(
-      //   `${process.env.REACT_APP_API_URL}/api/auth/signup`,
-      //   formData
-      // );
+  const { fullName, phone, email, password, isAgency } = formData;
 
+  if (!fullName || !phone || !email || !password || isAgency === null) {
+    toast.error("Please fill in all required fields");
+    setLoading(false);
+    return;
+  }
 
-      const res = await axios.post(
-        `https://auth-dashboardpages-backend.onrender.com/api/auth/signup`,
-        formData
-      );
-      toast.success(res.data.message || "Signup successful 🎉");
-      navigate("/login");
-    } catch (err) {
-      const message =
-        (err.response && err.response.data && err.response.data.error) ||
-        err.message ||
-        "Signup failed";
-      toast.error(message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    const res = { data: { message: "Signup successful!" } };
+
+    toast.success(res.data.message);
+    navigate("/login");
+  } catch (err) {
+    toast.error("Signup failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-100 to-purple-300 px-4">
@@ -56,39 +52,49 @@ export default function Signup() {
         <h2 className="text-2xl font-bold text-center mb-6 text-purple-700">
           Create your account
         </h2>
+
         <input
           name="fullName"
           placeholder="Full Name*"
+          value={formData.fullName}
           required
           onChange={handleChange}
           className="w-full p-3 border rounded-lg mb-3 focus:ring-2 focus:ring-purple-500"
         />
+
         <input
           name="phone"
           placeholder="Phone number*"
+          value={formData.phone}
           required
           onChange={handleChange}
           className="w-full p-3 border rounded-lg mb-3 focus:ring-2 focus:ring-purple-500"
         />
+
         <input
           type="email"
           name="email"
           placeholder="Email address*"
+          value={formData.email}
           required
           onChange={handleChange}
           className="w-full p-3 border rounded-lg mb-3 focus:ring-2 focus:ring-purple-500"
         />
+
         <input
           type="password"
           name="password"
           placeholder="Password*"
+          value={formData.password}
           required
           onChange={handleChange}
           className="w-full p-3 border rounded-lg mb-3 focus:ring-2 focus:ring-purple-500"
         />
+
         <input
           name="company"
           placeholder="Company name"
+          value={formData.company}
           onChange={handleChange}
           className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-purple-500"
         />
@@ -123,7 +129,9 @@ export default function Signup() {
           type="submit"
           disabled={loading}
           className={`w-full py-3 rounded-lg text-white font-semibold transition ${
-            loading ? "bg-gray-400 cursor-not-allowed" : "bg-purple-600 hover:bg-purple-700"
+            loading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-purple-600 hover:bg-purple-700"
           }`}
         >
           {loading ? "Creating..." : "Create Account"}

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
 export default function Login() {
@@ -16,28 +15,27 @@ export default function Login() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
+
+    const { email, password } = formData;
+
+    if (!email || !password) {
+      toast.error("Please fill in all fields");
+      setLoading(false);
+      return;
+    }
+
     try {
-
-      // console.log(process.env.REACT_APP_API_URL);
-      const res = await axios.post(
-        `https://auth-dashboardpages-backend.onrender.com/api/auth/login`,
-        formData
-      );
-
-
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      // Frontend-only dummy login
+      const dummyUser = { token: "123456", user: { email } };
+      localStorage.setItem("token", dummyUser.token);
+      localStorage.setItem("user", JSON.stringify(dummyUser.user));
       toast.success("Login successful");
       navigate("/dashboard");
     } catch (err) {
-      const message =
-        (err.response && err.response.data && err.response.data.error) ||
-        err.message ||
-        "Login failed";
-      toast.error(message);
+      toast.error("Login failed");
     } finally {
       setLoading(false);
     }
@@ -57,14 +55,19 @@ export default function Login() {
           name="email"
           type="email"
           placeholder="Email address"
+          value={formData.email}
           onChange={handleChange}
+          required
           className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-purple-500"
         />
+
         <input
           name="password"
           type="password"
           placeholder="Password"
+          value={formData.password}
           onChange={handleChange}
+          required
           className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-purple-500"
         />
 
@@ -72,11 +75,23 @@ export default function Login() {
           type="submit"
           disabled={loading}
           className={`w-full py-3 rounded-lg text-white font-semibold transition ${
-            loading ? "bg-gray-400 cursor-not-allowed" : "bg-purple-600 hover:bg-purple-700"
+            loading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-purple-600 hover:bg-purple-700"
           }`}
         >
           {loading ? "Logging in..." : "Login"}
         </button>
+
+        <p className="text-center mt-4 text-sm text-gray-600">
+          Don't have an account?{" "}
+          <Link
+            to="/signup"
+            className="text-purple-600 hover:text-purple-700 font-medium"
+          >
+            Sign up
+          </Link>
+        </p>
       </form>
     </div>
   );
