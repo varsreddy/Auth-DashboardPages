@@ -1,6 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
 export default function Signup() {
@@ -19,29 +18,30 @@ export default function Signup() {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
 
-  const { fullName, phone, email, password, isAgency } = formData;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-  if (!fullName || !phone || !email || !password || isAgency === null) {
-    toast.error("Please fill in all required fields");
-    setLoading(false);
-    return;
-  }
+    const { fullName, phone, email, password, isAgency } = formData;
 
-  try {
-    const res = { data: { message: "Signup successful!" } };
+    if (!fullName || !phone || !email || !password || isAgency === null) {
+      toast.error("Please fill in all required fields");
+      setLoading(false);
+      return;
+    }
 
-    toast.success(res.data.message);
-    navigate("/login");
-  } catch (err) {
-    toast.error("Signup failed");
-  } finally {
-    setLoading(false);
-  }
-};
+    try {
+      // Dummy frontend-only signup
+      const res = { data: { message: "Signup successful!" } };
+      toast.success(res.data.message);
+      navigate("/login");
+    } catch (err) {
+      toast.error("Signup failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-100 to-purple-300 px-4">
@@ -136,6 +136,16 @@ const handleSubmit = async (e) => {
         >
           {loading ? "Creating..." : "Create Account"}
         </button>
+
+        <p className="text-center mt-4 text-sm text-gray-600">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="text-purple-600 hover:text-purple-700 font-medium"
+          >
+            Login
+          </Link>
+        </p>
       </form>
     </div>
   );
