@@ -7,10 +7,6 @@ export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (localStorage.getItem("token")) navigate("/dashboard");
-  }, [navigate]);
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
